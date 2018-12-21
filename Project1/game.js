@@ -5,6 +5,9 @@ var p = 0;
 var dropsize = 25;
 var drops = [];
 var currentround = 0;
+var spawning = false;
+var score= 0;
+var levens=20;
 
 function setup() {
     frameRate(30);
@@ -32,6 +35,47 @@ function draw() {
     naam();
     instructies();
     commands();
+    toonScore();
+    toonLevens();
+}
+function toonScore() {
+
+    s = "Score: "+score;
+    textSize(28);
+    fill(0);
+    textAlign(CENTER);
+    text(s, 300, 20, 300, 100);
+
+
+}
+function toonLevens(){
+
+    s = "Levens: "+levens;
+    textSize(20);
+    fill(0);
+    textAlign(CENTER);
+    text(s, 600, 100, 300, 100);
+    for (var i = 0; i < world.enemies.length; i++) {
+        const enemy = world.enemies[i];
+        if(enemy.x<0 && enemy.y >700 && enemy.y <750 && levens != 0){
+            levens--;
+        }
+
+
+
+    }
+    if(levens <= 0){
+        fill(255);
+        rect(0, 0, 800, 800);
+        s = "GAME OVER";
+        textSize(80);
+        fill(0);
+        textAlign(CENTER);
+        text(s, 400, 400, 300, 200);
+    }
+
+    return levens;
+
 }
 
 function naam(){
@@ -226,10 +270,7 @@ function tower(){
     }
 
 }
-function aantalLevens(){
-    let levens=10;
-    return levens;
-}
+
 function range(tower,distance) {
     let count = aantalLevens();
     for (let i = tower; i < distance; i++) {
@@ -243,10 +284,6 @@ function range(tower,distance) {
 function keyPressed() {
     if ( keyCode === ESCAPE )
         paused = !paused;
-    spawning = false;
-    clearInterval(interval);
-   /* else if (keyCode === 38)
-        ronde1();*/
 }
 
 function mouseClicked() {
@@ -273,6 +310,7 @@ function drop(x, y) {
             if(!paused)enemy.health-=5;
             if(enemy.health<0){
                 world.enemies.splice(world.enemies.indexOf(enemy), 1);
+                score = score +20;
             }
         }
     }
@@ -298,7 +336,7 @@ function ronde1() {
     console.log("r1");
     currentround = 1;
     console.log(world.enemies.length);
-    let amount = 5;
+    let amount = 20;
     spawning = true;
     let interval = setInterval(() => {
         world.enemies.push({x: 0, y: 270, health: 1, speed: 10});
@@ -315,7 +353,7 @@ function ronde1() {
 function ronde2() {
     console.log("r2");
     currentround = 2;
-    let amount = 5;
+    let amount = 20;
     spawning = true;
     let interval = setInterval(() => {
         world.enemies.push({x: 0, y: 270, health: 1, speed: 20});
@@ -328,7 +366,7 @@ function ronde2() {
 function ronde3() {
     console.log("r3");
     currentround = 3;
-    let amount = 5;
+    let amount = 15;
     spawning = true;
     let interval = setInterval(() => {
         world.enemies.push({x: 0, y: 270, health: 1, speed: 30});
@@ -340,7 +378,7 @@ function ronde3() {
 function ronde4() {
     console.log("r4");
     currentround = 4;
-    let amount = 5;
+    let amount = 10;
     spawning = true;
     let interval = setInterval(() => {
         world.enemies.push({x: 0, y: 270, health: 1, speed: 40});
